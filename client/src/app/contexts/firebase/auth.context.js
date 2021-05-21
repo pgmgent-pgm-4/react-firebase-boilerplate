@@ -20,7 +20,7 @@ const AuthProvider = ({children}) => {
     return () => {
       unsubscribe();
     }
-  }, []);
+  }, [auth]);
 
   const signInWithEmailAndPassword = async (email, password) => {
     try {
