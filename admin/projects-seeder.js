@@ -19,8 +19,8 @@ const GDMGENT_API_CASES = 'https://www.gdm.gent/static/data/cases.json';
       ...generateTimestamps()
     };
 
-    collectionRef.add(data).then(documentReference => {
-      console.log(`Added document with name: ${documentReference.id}`);
+    collectionRef.doc(uuidv4()).set(data).then(documentReference => {
+      console.log(`Added project.`);
     });
   };
 
