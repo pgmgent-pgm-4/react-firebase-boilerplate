@@ -1,4 +1,4 @@
-import { AuthProvider, FirebaseProvider } from './contexts/firebase';
+import { AuthProvider, FirebaseProvider, FirestoreProvider } from './contexts/firebase';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 
 import * as Routes from './routes';
@@ -11,15 +11,17 @@ function App() {
     <div className={styles.app}>
       <FirebaseProvider>
         <AuthProvider>
-          <Router basename={'/'}>
-            <Switch>
-              	<Route exact path={Routes.LANDING} component={ HomePage }/>
-                <Route from={Routes.HOME} to={Routes.LANDING}/>
-                <Route exact path={Routes.PROJECT_DETAILS} component={ ProjectPage }/>
-                <Route exact path={Routes.PROJECTS} component={ ProjectsPage }/>
-                <Route exact path={Routes.AUTH_SIGN_IN} component={ SignInPage }/>
-            </Switch>
-          </Router>
+          <FirestoreProvider>
+            <Router basename={'/'}>
+              <Switch>
+                  <Route exact path={Routes.LANDING} component={ HomePage }/>
+                  <Route from={Routes.HOME} to={Routes.LANDING}/>
+                  <Route exact path={Routes.PROJECT_DETAILS} component={ ProjectPage }/>
+                  <Route exact path={Routes.PROJECTS} component={ ProjectsPage }/>
+                  <Route exact path={Routes.AUTH_SIGN_IN} component={ SignInPage }/>
+              </Switch>
+            </Router>
+          </FirestoreProvider>
         </AuthProvider>
       </FirebaseProvider>
     </div>

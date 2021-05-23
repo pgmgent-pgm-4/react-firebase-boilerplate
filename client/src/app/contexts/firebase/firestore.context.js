@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import 'firebase/firestore';
+import { v4 as uuidv4 } from 'uuid';
 
-import { useFirebase } from './firebase.services';
+import { useFirebase } from './firebase.context';
 
 const FirestoreContext = React.createContext(null);
 const useFirestore = () => useContext(FirestoreContext);
@@ -23,7 +24,7 @@ const FirestoreProvider = ({children}) => {
   };
 
   const addReview = async (projectRef, review) => {
-    var reviewRef = projectRef.collection('reviews').doc();
+    var reviewRef = projectRef.collection('reviews').doc(uuidv4());
 
     return db.runTransaction((transaction) => {
         return transaction.get(projectRef).then((res) => {
@@ -36,14 +37,14 @@ const FirestoreProvider = ({children}) => {
 
             // Compute new average rating
             var oldRatingTotal = res.data().avgRating * res.data().numReviews;
-            var newAvgRating = (oldRatingTotal + rating) / newNumReviews;
+            var newAvgRating = (oldRatingTotal + review.rating) / newNumReviews;
 
             // Commit to Firestore
             transaction.update(projectRef, {
                 numReviews: newNumReviews,
                 avgRating: newAvgRating
             });
-            transaction.set(reviewRef, { rating: rating });
+            transaction.set(reviewRef, review);
         });
     });
   }
