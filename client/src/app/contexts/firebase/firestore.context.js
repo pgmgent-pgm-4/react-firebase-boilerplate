@@ -12,7 +12,8 @@ const FirestoreProvider = ({children}) => {
   const db = app.firestore();
 
   const getProjects = async () => {
-    const query = db.collection('projects').orderBy('createdAt', 'desc');
+    const query = db.collection('projects')
+      .orderBy('createdAt', 'desc');
     const querySnapshot = await query.get();
     const projects = querySnapshot.docs.map((doc) => {
       return {
@@ -23,13 +24,63 @@ const FirestoreProvider = ({children}) => {
     return projects;
   };
 
+  const getPagedProjects = async (itemsPerPage = 10, lastVisible = null) => {
+    let query = null;
+
+    if (lastVisible === null) {
+      query = db.collection('projects')
+      .orderBy('createdAt', 'desc')      
+      .limit(itemsPerPage);
+    } else {
+      query = db.collection('projects')
+      .orderBy('createdAt', 'desc')
+      .startAfter(lastVisible)
+      .limit(itemsPerPage);
+    }
+    
+    const querySnapshot = await query.get();
+    const lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length-1];
+    const projects = querySnapshot.docs.map((doc) => {
+      return {
+        uid: doc.id,
+        ...doc.data()
+      }
+    });
+    return {projects, itemsPerPage, lastVisibleDoc};
+  };
+
+  const getProjectById = async (projectId) => {
+    const docRef = db.collection('projects').doc(projectId);
+    const doc = await docRef.get();
+    if (!doc.exists) {
+        throw new Error('Document does not exist!');
+    }
+
+    return {
+      uid: doc.id,
+      ...doc.data()
+    }
+  };
+
+  const getProjectReviews = async (projectId) => {
+    const query = db.collection('projects').doc(projectId).collection('reviews').orderBy('createdAt', 'desc');
+    const querySnapshot = await query.get();
+    const projectReviews = querySnapshot.docs.map((doc) => {
+      return {
+        uid: doc.id,
+        ...doc.data()
+      }
+    });
+    return projectReviews;
+  };
+
   const addReview = async (projectRef, review) => {
     var reviewRef = projectRef.collection('reviews').doc(uuidv4());
 
     return db.runTransaction((transaction) => {
         return transaction.get(projectRef).then((res) => {
             if (!res.exists) {
-                throw "Document does not exist!";
+                throw new Error('Document does not exist!');
             }
 
             // Compute new number of reviews
@@ -50,7 +101,7 @@ const FirestoreProvider = ({children}) => {
   }
 
   return (
-    <FirestoreContext.Provider value={{addReview, getProjects}}>
+    <FirestoreContext.Provider value={{addReview, getPagedProjects, getProjectById, getProjects, getProjectReviews}}>
       {children}
     </FirestoreContext.Provider>
   );

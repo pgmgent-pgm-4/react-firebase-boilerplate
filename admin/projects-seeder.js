@@ -2,6 +2,7 @@ import fetch from 'node-fetch';
 import { v4 as uuidv4 } from 'uuid';
 
 import { admin, app, db, generateTimestamps } from './firebase';
+import firebase from 'firebase';
 
 const GDMGENT_API_CASES = 'https://www.gdm.gent/static/data/cases.json';
 
@@ -28,6 +29,8 @@ const GDMGENT_API_CASES = 'https://www.gdm.gent/static/data/cases.json';
   const createProjects = async () => {
     const response = await fetch(`${GDMGENT_API_CASES}`);
     const jsonData = await response.json();
+
+    db.collection('counters').doc('projects').set({numAmount: jsonData.length}, {merge: true});
 
     const promises = [];
     jsonData.forEach(project => {

@@ -10,12 +10,15 @@ const SignInPage = ({children}) => {
     txtPassword: ''
   });
   const {currentUser,signInWithEmailAndPassword,signOut} = useAuth();
+  console.log(currentUser);
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
 
     const result = await signInWithEmailAndPassword(signInForm.txtEmail, signInForm.txtPassword);
-    history.goBack();
+    if (result) {
+      history.goBack();
+    }    
   }
 
   const handleInputChange = async (ev) => {
@@ -30,6 +33,7 @@ const SignInPage = ({children}) => {
       <div className="container">
         <div className="row">
           <div className="col-12 offset-md-2 col-md-8 offset-lg-3 col-lg-6">
+            {!!currentUser === false &&
             <form onSubmit={(ev) => handleSubmit(ev)}>
               <div className="form-group">
                 <label htmlFor="txtEmail">Email address</label>
@@ -42,6 +46,13 @@ const SignInPage = ({children}) => {
               </div>
               <button type="submit" className="btn btn-primary">Sign In</button>
             </form>
+            }
+            {!!currentUser === true && 
+              <div>
+                <img src={currentUser.photoURL} />
+                <button onClick={() => signOut()}>Sign out</button>
+              </div>
+            }
           </div>
         </div>
       </div>      

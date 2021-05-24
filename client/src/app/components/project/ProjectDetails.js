@@ -1,12 +1,9 @@
 import { FiEye } from "react-icons/fi";
 import { VscPreview } from "react-icons/vsc";
-import { Link } from 'react-router-dom';
 
-import * as Routes from '../../routes';
+import styles from './ProjectDetails.module.scss';
 
-import styles from './ProjectListItem.module.scss';
-
-const ProjectListItem = ({ project }) => {
+const ProjectDetails = ({ project }) => {
   return (
     <article className={styles.projectlistItem}>      
       <picture className={styles.picture}>
@@ -14,7 +11,7 @@ const ProjectListItem = ({ project }) => {
       </picture>
       <div className={styles.content}>
         <span className={styles.rating}>{Math.round(project.avgRating / 5 * 100)}</span>
-        <h3 className={styles.title}><Link to={Routes.PROJECT_DETAILS.replace(':id', project.uid)}>{ project.title }</Link></h3>
+        <h3 className={styles.title}>{ project.title }</h3>
       </div>   
       <footer className={styles.meta}>
         <span className={styles.numReviews}><VscPreview /><span>{ project.numReviews }</span></span>
@@ -24,4 +21,4 @@ const ProjectListItem = ({ project }) => {
   )
 };
 
-export default ProjectListItem;
+export default ProjectDetails;
