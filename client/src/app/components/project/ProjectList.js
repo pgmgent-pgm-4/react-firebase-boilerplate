@@ -18,7 +18,7 @@ const ProjectList = ({itemsPerPage = 10}) => {
     }
 
     fetchData();    
-  }, [itemsPerPage, loadMoreCounter]);
+  }, [itemsPerPage, getPagedProjects, loadMoreCounter]);
 
   return (
     <div className="project-list">
