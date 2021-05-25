@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useFirestore } from "../../contexts/firebase/firestore.context";
 
@@ -7,22 +7,18 @@ import ProjectListItem from './ProjectListItem';
 const ProjectList = ({itemsPerPage = 10}) => {
   const [ projects, setProjects ] = useState();
   const [ lastVisible, setLastVisible ] = useState(null);
+  const [ loadMoreCounter, setLoadMoreCounter ] = useState(1);
   const { getPagedProjects } = useFirestore();
 
-  const fetchData = async () => {
-    const data = await getPagedProjects(itemsPerPage, lastVisible);
-    console.log(data);
-    if (lastVisible === null || (lastVisible.uid !== data.lastVisibleDoc)) {
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getPagedProjects(itemsPerPage, lastVisible);
       setLastVisible(data.lastVisibleDoc);
       setProjects(data.projects);
     }
-  }
-  
-  useEffect(() => {
+
     fetchData();    
-  }, []);
-
-
+  }, [itemsPerPage, loadMoreCounter]);
 
   return (
     <div className="project-list">
@@ -31,7 +27,7 @@ const ProjectList = ({itemsPerPage = 10}) => {
           <ProjectListItem key={project.uid} project={project} />
         )
       })}
-      {!!projects && <button onClick={() => fetchData()}>MORE</button>}
+      {!!projects && (projects.length >= itemsPerPage) && <button onClick={() => setLoadMoreCounter(loadMoreCounter + 1)}>MORE</button>}
     </div>
   )
 };
