@@ -20,10 +20,10 @@ jobs:
     - name: Install Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: 14.15.1
+        node-version: 14.16.1
     
     - name: Install NPM packages
-      run: npm install
+      run: npm ci
       working-directory: ./client 
     
     - name: Build project
