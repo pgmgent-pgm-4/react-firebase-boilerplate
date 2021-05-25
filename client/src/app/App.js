@@ -1,5 +1,5 @@
 import { AuthProvider, FirebaseProvider, FirestoreProvider } from './contexts/firebase';
-import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import * as Routes from './routes';
 
@@ -12,7 +12,7 @@ function App() {
       <FirebaseProvider>
         <AuthProvider>
           <FirestoreProvider>
-            <Router basename={'/react-firebase-boilerplate'}>
+            <Router basename={'react-firebase-boilerplate'}>
               <Switch>
                   <Route exact path={Routes.LANDING} component={ HomePage }/>
                   <Route from={Routes.HOME} to={Routes.LANDING}/>

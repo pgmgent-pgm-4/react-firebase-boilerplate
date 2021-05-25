@@ -10,7 +10,6 @@ const SignInPage = ({children}) => {
     txtPassword: ''
   });
   const {currentUser,signInWithEmailAndPassword,signOut} = useAuth();
-  console.log(currentUser);
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
@@ -49,7 +48,7 @@ const SignInPage = ({children}) => {
             }
             {!!currentUser === true && 
               <div>
-                <img src={currentUser.photoURL} />
+                <img src={currentUser.photoURL} alt={currentUser.email} />
                 <button onClick={() => signOut()}>Sign out</button>
               </div>
             }
