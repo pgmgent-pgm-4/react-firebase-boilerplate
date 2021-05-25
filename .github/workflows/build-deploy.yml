@@ -23,7 +23,7 @@ jobs:
         node-version: 14.15.1
     
     - name: Install NPM packages
-      run: npm ci
+      run: npm install
       working-directory: ./client 
     
     - name: Build project
