@@ -12,7 +12,7 @@ function App() {
       <FirebaseProvider>
         <AuthProvider>
           <FirestoreProvider>
-            <Router basename={'/'}>
+            <Router basename={'/react-firebase-boilerplate'}>
               <Switch>
                   <Route exact path={Routes.LANDING} component={ HomePage }/>
                   <Route from={Routes.HOME} to={Routes.LANDING}/>
