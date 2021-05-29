@@ -11,6 +11,8 @@ const FirestoreProvider = ({children}) => {
   const { app } = useFirebase();
   const db = app.firestore();
 
+  let lastVisibleProject = null;
+
   const getProjects = async () => {
     const query = db.collection('projects')
       .orderBy('createdAt', 'desc');
@@ -24,29 +26,29 @@ const FirestoreProvider = ({children}) => {
     return projects;
   };
 
-  const getPagedProjects = async (itemsPerPage = 10, lastVisible = null) => {
+  const getPagedProjects = async (itemsPerPage = 10) => {
     let query = null;
 
-    if (lastVisible === null) {
+    if (lastVisibleProject === null || lastVisibleProject === undefined) {
       query = db.collection('projects')
       .orderBy('createdAt', 'desc')      
       .limit(itemsPerPage);
     } else {
       query = db.collection('projects')
       .orderBy('createdAt', 'desc')
-      .startAfter(lastVisible)
+      .startAfter(lastVisibleProject)
       .limit(itemsPerPage);
     }
     
     const querySnapshot = await query.get();
-    const lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length-1];
+    lastVisibleProject = querySnapshot.docs[querySnapshot.docs.length-1];
     const projects = querySnapshot.docs.map((doc) => {
       return {
         uid: doc.id,
         ...doc.data()
       }
     });
-    return {projects, itemsPerPage, lastVisibleDoc};
+    return {projects};
   };
 
   const getProjectById = async (projectId) => {
