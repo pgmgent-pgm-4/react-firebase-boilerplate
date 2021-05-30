@@ -1,4 +1,4 @@
-name: Deploy to Preview Channel
+name: Deploy to Firebase Hosting (Production)
 
 on:
   push:
