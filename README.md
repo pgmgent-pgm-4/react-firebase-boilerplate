@@ -16,6 +16,14 @@ REACT_APP_MESSAGING_SENDER_ID=
 REACT_APP_APP_ID=
 ```
 
+### Add firebase tools
+
+`npm install -g firebase-tools`
+
+`firebase init hosting --token <token>`
+
+
+
 ## Admin
 
 `key.json`

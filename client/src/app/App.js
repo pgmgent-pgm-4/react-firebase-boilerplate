@@ -1,10 +1,11 @@
 import { AuthProvider, FirebaseProvider, FirestoreProvider } from './contexts/firebase';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
+import { appConfig } from './config';
 import * as Routes from './routes';
+import { HomePage, ProjectPage, ProjectsPage, SignInPage } from './pages';
 
 import styles from './App.module.scss';
-import { HomePage, ProjectPage, ProjectsPage, SignInPage } from './pages';
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
       <FirebaseProvider>
         <AuthProvider>
           <FirestoreProvider>
-            <Router basename={''}>
+            <Router basename={appConfig.basicURL}>
               <Switch>
                   <Route exact path={Routes.LANDING} component={ HomePage }/>
                   <Route from={Routes.HOME} to={Routes.LANDING}/>
